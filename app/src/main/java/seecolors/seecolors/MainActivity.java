@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             imageView.setImageBitmap(imageBitmap);
-            int color = imageBitmap.getPixel(0,0);
+
 
 
 
@@ -57,12 +57,11 @@ public class MainActivity extends AppCompatActivity {
             int b = (color & 0x00FF0000) >>> 16;
             int r = (color & 0x0000FF00) >>> 8;*/
 
-            int r = Color.red(color);
-            int g = Color.green(color);
-            int b = Color.blue(color);
+
 //            Log.d("", "&*" + dist(r,g,b,255,255,255));
 //            this.text.setText("g = " + g + " | b = " + b + " | r = " + r);
 //
+
 //  this.text.setText("oi" + dist(r,g,b,255,255,255));
         int[][] colors = {
                 {255,0,0},
@@ -72,7 +71,8 @@ public class MainActivity extends AppCompatActivity {
                 {255,0,255},
                 {0,0,255},
                 {255,255,255},
-                {0,0,0}
+                {0,0,0},
+                //{125,125,125}
         };
         String[] nomeColors = {
                 "vermelho",
@@ -82,10 +82,31 @@ public class MainActivity extends AppCompatActivity {
                 "magenta",
                 "azul",
                 "branco",
-                "preto"
+                "preto",
+                //"cinza"
         };
+        int []contCor ={0,0,0,0,0,0,0,0,0};
+            for (int i = 0; i<imageBitmap.getWidth(); i++){
+                for (int j = 0; imageBitmap.getHeight() > j; j++){
+                    int color = imageBitmap.getPixel(i,j);
+                    int r = Color.red(color);
+                    int g = Color.green(color);
+                    int b = Color.blue(color);
+//                    this.compare(colors, r, g, b);
+//                    this.text.setText("r :"+r+" g :"+g+"b :"+b);
+//                    int cont = this.compare(colors, r, g, b);
+                    int cont = this.compare(colors, r, g, b);
+                    //if (cont == i){
+                        contCor[cont]++;
+                    //}
 
 
+                }
+            }
+            //this.finc(contCor,nomeColors);
+//
+//            this.text.setText("indice 0:"+"=>"+contCor[0]+"indice 1 :"+contCor[1]+"indice 2 :"+contCor[2]+"indice 3 :"+contCor[3]+"indice 4 :"+contCor[4]+"indice 5:"+contCor[5]+"indice 6 :"+contCor[6]+"indice 7 :"+contCor[7]+"indice 8 :"+contCor[8]);
+        this.finc(contCor,nomeColors);
         }
 
     }
@@ -95,8 +116,32 @@ public class MainActivity extends AppCompatActivity {
           int bF = b1 - b2;
            return Math.sqrt(Math.pow(rF, 2)+ Math.pow(gF, 2) + Math.pow(bF, 2));
     }
-        public double compareColors(){
+        public int compare(int[][]cor,int r, int g ,int b){
+            Double min = Double.MAX_VALUE;
+            double minnew = 0 ;
+            int indice = -1;
+            for (int i=0; i<cor.length; i++){
+                minnew =this.dist(cor[i][0],cor[i][1],cor[i][2],r,g,b);
+                if (minnew < min) {
+                  min = minnew;
+                    indice = i;
+                }
 
+            }
+            return indice;
         }
+    public void finc(int[] cor, String[] cores){
+        int indice = -1 ;
+        int max = 0 ;
+        for (int i = 1; i < cor.length; i++) {
+            if (cor[i] > max) {
+                max = cor[i];
+                indice = i;
+            }
+        }
+
+        this.text.setText("cor"+cores[indice]);
+
+    }
 
 }
